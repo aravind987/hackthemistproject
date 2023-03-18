@@ -1,0 +1,42 @@
+.parent-container {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    margin: 0 auto;
+    top: 30vh;
+}
+
+.text-input {
+    padding: 3em 5em 2em 5em;
+    border-radius: 4em;
+    background-color: red;
+    display: flex;
+    flex-direction: column;
+    row-gap: 5vh;
+    align-items: center;
+}
+
+.text-input label {
+    font-size: 2em;
+}
+
+.text-input input[type="keyword"] {
+    padding: 1em;
+    border-radius: 1em;
+    border: none;
+    box-shadow: 0 2px 10px 8px rgba(0, 0, 0, 0.4);
+    outline: none;
+
+    width: 20em;
+}
+
+.text-form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2vh;
+    align-items: center;
+}
+
+.twitter-container {
+
+}
