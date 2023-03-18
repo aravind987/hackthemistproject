@@ -1,53 +1,28 @@
-import './App.css';
 
-import { TwitterTweetEmbed } from 'react-twitter-embed'
-import { useState, useEffect } from 'react'
 
-var currentText;
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-async function retrieveClasses(text) {
+import {Home, Profile} from './pages/import.js'
 
-}
 
 function App() {
 
-    const [ currentTwitter, setCurrentTwitter] = useState(null)
+   return (
+        <div>
+            <BrowserRouter>
 
-    function retrieveClasses(text) {
-        console.log("Sending " + text + " From React")
-        fetch('/getClass', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                text: text
-            })
-        }).then(res => res.json())
-        .then((data) => {
-            setCurrentTwitter(data[0])
-        })
-        console.log(currentTwitter)
-    }
+                  <Routes>
 
-    useEffect(() => retrieveClasses(currentText), [])
+                    <Route path="/" element={<Home/>}/>
 
-    return (
-        <div className="parent-container">
-            <div className="text-input">
-                <form className="text-form">
-                    <label>Key Words</label>
-                    <input type="keyword" id="fname" name="fname" placeholder="Enter Something"
-                    onChange = {(event) => {currentText = event.target.value}}></input>
-                </form>
+                  </Routes>
 
-                <button className="submit-button" onClick={() => retrieveClasses(currentText)}>Test</button>
-
-            </div>
-
-            <div className="twitter-container">
-                {currentTwitter}
-            </div>
+            </BrowserRouter>
         </div>
-    );
+
+   )
 }
 
 export default App;
