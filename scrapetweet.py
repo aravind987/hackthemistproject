@@ -1,6 +1,10 @@
 import snscrape.modules.twitter as sntwitter
 import pandas as pd
 import itertools
+import sys
+
+sys.stdin.reconfigure(encoding="utf-8")
+sys.stdout.reconfigure(encoding="utf-8")
 
 
 def scrape_by_keywords(list1, list2):
@@ -56,5 +60,5 @@ if __name__ == "__main__":
     a = ['Rashford', 'vini', 'Vinicius', "Alexander-Arnold", "Naby Keita",
          "zlatan", "ibrahimovic"]
     b = ['nigga', 'black']
-    print(scrape_by_keywords(a, b)[['content', 'username']].head(10))
-    print(scrape_by_username('jack')['Text'].head(10))
+    df = scrape_by_keywords(a, b).head(40)
+    df.to_csv('test.csv')

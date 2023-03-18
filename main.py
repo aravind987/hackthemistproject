@@ -21,7 +21,7 @@ def classifyText():
             'time': '26/5/32'
         },
         {
-            'username': 'Test',
+            'username': 'AADADA',
             'text': "HIII",
             'time': '26/5/32'
         }
