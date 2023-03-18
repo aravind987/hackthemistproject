@@ -2,10 +2,23 @@ import React from 'react'
 
 import './profile.css'
 
-function Profile() {
+function Profile({image, username}) {
     return (
         <div className="profile-container">
-            TESTT
+
+            <div className="profile-top">
+                <img src={image}/>
+                <p>{'@' + username}</p>
+            </div>
+
+            <div className="profile-right">
+                Profile Side
+            </div>
+
+            <div className="profile-stats">
+                Profile Stats
+            </div>
+
         </div>
     )
 }

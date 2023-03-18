@@ -50,7 +50,7 @@ function Home() {
 
     return (
         <div className="parent-container">
-            <div>
+            <div className="comment-container">
                 <div className="text-input">
                     <form className="text-form">
                         <label>Key Words</label>
@@ -67,7 +67,8 @@ function Home() {
                     return <TweetEmbed tweet={tweet}/>})}
                 </div>
             </div>
-            <Profile/>
+            <Profile image={"https://media.discordapp.net/attachments/757730257150279742/1080660938249736244/image.png?width=156&height=222"}
+                     username={"NAMEHERE"}/>
         </div>
     );
 

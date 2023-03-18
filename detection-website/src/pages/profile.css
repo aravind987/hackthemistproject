@@ -1,4 +1,44 @@
 .profile-container {
     position: fixed;
+    height: 80vh;
+    top: 10vh;
+    width: 55vw;
     margin-left: 45vw;
+    display: grid;
+    grid-template-columns: repeat(100, 1fr);
+    grid-template-rows: repeat(100, 1fr);
+
+}
+
+.profile-top {
+    grid-area: 1 / 1 / 34 / 67;
+    background-color: red;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 3em;
+}
+
+.profile-top img {
+    --size: 7em;
+    width: var(--size);
+    height: var(--size);
+    object-fit: cover;
+    border-radius: 100em;
+}
+
+.profile-top p {
+    font-size: 1.5em;
+    color: rgba(0, 0, 0, 0.5);
+    margin-left: 1em;
+}
+
+.profile-right {
+    grid-area: 1 / 67 / 101 / 101;
+    background-color:black;
+}
+
+.profile-stats {
+    grid-area: 34 / 1 / 101 / 67;
+    background-color:blue;
 }
