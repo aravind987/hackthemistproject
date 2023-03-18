@@ -8,7 +8,7 @@ CORS(app)
 def classifyText():
     text_data = request.get_json()['text']
 
-    classTags = ["Returning from Python"]
+    classTags = ["Returning " +text_data + " from Python"]
 
     # Do Something
     print(text_data)
