@@ -65,7 +65,6 @@ if __name__ == "__main__":
     #Get tweets from keyword
     tweetsFromKeyword = scrape_by_keywords(text_data, triggerWords).head(50)
     tweetInfo = tweetsFromKeyword[['content','username']].copy()
-    tweetInfo.to_csv('test.csv')
 
     #Make sure content of tweet contains both keyword and trigger words instead of username
     deleteIndex = []
