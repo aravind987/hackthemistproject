@@ -34,9 +34,9 @@ function Profile({image, username, percentRacist, percentHate, percentNeutral}) 
 
             <div className="profile-stats">
                 <h1>Statistics</h1>
-                <FillBar percentage={percentRacist} name = "Racist %" color="#FF0000"/>
-                <FillBar percentage={percentHate} name = "Hate %" color="#0000FF"/>
-                <FillBar percentage={percentNeutral} name = "Neutral %" color="#00FF00"/>
+                <FillBar percentage={percentRacist} name = {"Racist " + Math.floor(percentRacist * 100) + "%"} color="#3C7A89"/>
+                <FillBar percentage={percentHate} name = {"Hate " + Math.floor(percentHate * 100) + "%"} color="#F79F79"/>
+                <FillBar percentage={percentNeutral} name = {"Neutral " + Math.floor(percentNeutral * 100) + "%"} color="#D3F3EE"/>
             </div>
 
         </div>

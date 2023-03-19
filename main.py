@@ -70,7 +70,7 @@ def checkAccount():
     racistComments /= totalComments
     hateComments /= totalComments
     neutralComments /= totalComments
-
+    
     # Store all potentially malicious accounts from tweets
     return [{
         'image': "https://media.discordapp.net/attachments/757730257150279742/1080660938249736244/image.png?width=156&height=222",
