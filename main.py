@@ -3,8 +3,8 @@ from flask_cors import CORS
 from scrapetweet import scrape_by_keywords, scrape_by_username
 import sys
 
-sys.stdin.reconfigure(encoding="utf-16")
-sys.stdout.reconfigure(encoding="utf-16")
+sys.stdin.reconfigure(encoding="utf-8")
+sys.stdout.reconfigure(encoding="utf-8")
 
 app = Flask(__name__)
 CORS(app)
@@ -33,7 +33,7 @@ def classifyText():
 
     #Get tweets from keyword
     tweetsFromKeyword = scrape_by_keywords(text_data, triggerWords).head(200)
-
+    print(len(tweetsFromKeyword))
     #Make sure content of tweet contains both keyword and trigger words instead of username
     deleteIndex = []
 
@@ -49,16 +49,22 @@ def classifyText():
 
         if not (hasKeyword and hasTriggerWord):
             deleteIndex.append(index)
-    
+
     #Drop all non malicious tweets
     tweetsFromKeyword.drop(deleteIndex, axis=0, inplace=True)
     #Store all potentially malicious accounts from tweets
     potentialMalicious = tweetsFromKeyword[['date','content','username']]
-    potentialMalicious.to_csv('test.csv')
 
-    print(potentialMalicious)
+    twitterToReturn = list(range(len(potentialMalicious)))
 
-    return classTags
+    for i in range(len(potentialMalicious)):
+        twitterToReturn[i] = {
+            'image': 'https://scontent-yyz1-1.xx.fbcdn.net/v/t39.30808-6/308487577_523808733083795_2015773722187850021_n.png?_nc_cat=107&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=uXF-ArkDCnAAX9_bgtN&_nc_ht=scontent-yyz1-1.xx&oh=00_AfCJAxcfz92uwXUBP6GtYx4FDuIqWT6pEdgG6p8ryq5m_Q&oe=641C4E94',
+            'username': potentialMalicious.iloc[i]['username'],
+            'text': potentialMalicious.iloc[i]['content'],
+            'time': potentialMalicious.iloc[i]['date']
+        }
+    return twitterToReturn
 
 if __name__ == "__main__":
     app.run(debug=True)
