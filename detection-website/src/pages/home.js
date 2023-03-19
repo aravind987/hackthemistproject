@@ -9,16 +9,19 @@ import Profile from './profile.js'
 
 var currentText;
 
+var defaultProfile = {
+    image: "https://scontent-yyz1-1.xx.fbcdn.net/v/t39.30808-6/308487577_523808733083795_2015773722187850021_n.png?_nc_cat=107&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=uXF-ArkDCnAAX9_bgtN&_nc_ht=scontent-yyz1-1.xx&oh=00_AfCJAxcfz92uwXUBP6GtYx4FDuIqWT6pEdgG6p8ryq5m_Q&oe=641C4E94",
+    username: "Example",
+    percentRacist: 0.0,
+    percentHate: 0.0,
+    percentNeutral: 0.0
+}
+
 function Home() {
 
     const [ currentTwitter, setCurrentTwitter] = useState(null)
-    const [ profileDisplay, setProfileDisplay] = useState({
-        image: "https://media.discordapp.net/attachments/757730257150279742/1080660938249736244/image.png?width=156&height=222",
-        username: "Example",
-        percentRacist: 0.8,
-        percentHate: 0.4,
-        percentNeutral: 0.2
-    })
+    const [ profileDisplay, setProfileDisplay] = useState(defaultProfile)
+
 
     function postAccount(username: string) {
         if(username == null)
@@ -56,7 +59,6 @@ function Home() {
         })
     }
 
-    useEffect(() => postAccount(), [])
 
 
     function TweetEmbed({tweet}) {
@@ -72,14 +74,30 @@ function Home() {
 
     }
 
+    const [ freezeTop, setFreezeTop ] = useState('relative');
+    const [ padTwitter, setPadTwitter ] = useState('unpadded');
+
+    const stickNavbar = () => {
+        if (window !== undefined) {
+            let windowHeight = window.scrollY;
+            if(windowHeight > 180) {
+                setFreezeTop('fixed');
+                setPadTwitter('padded');
+            } else {
+                setFreezeTop('relative');
+                setPadTwitter('unpadded');
+            }
+        }
+    };
+
+    window.addEventListener('scroll', stickNavbar);
 
 
-    useEffect(() => retrieveClasses(currentText), [])
 
     return (
         <div className="parent-container">
             <div className="comment-container">
-                <div className="text-input">
+                <div className={"text-input " + freezeTop}>
                     <form className="text-form">
                         <label>Key Words</label>
                         <input type="keyword" placeholder="Enter Something"
@@ -90,7 +108,7 @@ function Home() {
 
                 </div>
 
-                <div className="twitter-container">
+                <div className={"twitter-container " + padTwitter}>
                     {currentTwitter != null && currentTwitter.map((tweet) => {
                     return <TweetEmbed tweet={tweet}/>})}
                 </div>
