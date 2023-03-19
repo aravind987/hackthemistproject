@@ -2,6 +2,9 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from scrapetweet import scrape_by_keywords, scrape_by_username
 import sys
+import cohere
+#from cohere.classify import Example
+import pandas as pd
 
 sys.stdin.reconfigure(encoding="utf-8")
 sys.stdout.reconfigure(encoding="utf-8")
@@ -17,7 +20,40 @@ Gets a username from the Front-End site and runs it through Co:here's API
 def checkAccount():
     username = request.get_json()['username']
 
-    tweetByUsernames = scrape_by_username(username)
+    tweetByUsernames = scrape_by_username(username).head(90)
+
+    #Set trigger words
+    triggerWords = ['mixed', 'muslims', 'nigga', 'chinese', 'jews', 'monkey', 'white', 'lesbian', 'black', 'nigger','immigrant','cunt']
+
+    #Make sure content of tweet contains trigger words instead of username
+    deleteIndex = []
+
+    for index,row in tweetByUsernames.iterrows():
+        hasTriggerWord = False
+
+        for word in row['Text'].split():
+            if word in triggerWords:
+                hasTriggerWord = True
+
+        if not (hasTriggerWord):
+            deleteIndex.append(index)
+
+    #Drop all non malicious tweets
+    tweetByUsernames.drop(deleteIndex, axis=0, inplace=True)
+    #Store all potentially malicious accounts from tweets
+    potentialMalicious = tweetByUsernames[['Datetime','Text','Username']]
+
+    potentialMalicious.to_csv('test2.csv')
+
+    maliciousContentList = (potentialMalicious['Text']).to_list
+
+    co = cohere.Client('c2fGtXEdjVrQGYsS8rCNTRRLjn9wHCRBunYa2S8V') # This is your trial API key
+    response = co.classify(
+    model='623232f3-320c-4baf-a830-2972ec7d8bb3-ft',
+    inputs=maliciousContentList)
+
+    responsedf = pd.read_json(response)
+    responsedf.to_csv('test5.csv')
 
     return [{
         'image': "https://media.discordapp.net/attachments/757730257150279742/1080660938249736244/image.png?width=156&height=222",
@@ -36,7 +72,6 @@ def classifyText():
 
     #Get tweets from keyword
     tweetsFromKeyword = scrape_by_keywords(text_data, triggerWords).head(200)
-    print(len(tweetsFromKeyword))
     #Make sure content of tweet contains both keyword and trigger words instead of username
     deleteIndex = []
 
@@ -57,6 +92,8 @@ def classifyText():
     tweetsFromKeyword.drop(deleteIndex, axis=0, inplace=True)
     #Store all potentially malicious accounts from tweets
     potentialMalicious = tweetsFromKeyword[['date','content','username']]
+
+    potentialMalicious.to_csv('test1.csv')
 
     twitterToReturn = list(range(len(potentialMalicious)))
 
