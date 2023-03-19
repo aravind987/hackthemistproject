@@ -6,14 +6,17 @@ import { useState, useEffect } from 'react'
 
 import Profile from './profile.js'
 
+import TwitterLogo from './Twitter-logo.svg.png'
+
 var currentText;
+
 
 var defaultProfile = {
     image: "https://scontent-yyz1-1.xx.fbcdn.net/v/t39.30808-6/308487577_523808733083795_2015773722187850021_n.png?_nc_cat=107&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=uXF-ArkDCnAAX9_bgtN&_nc_ht=scontent-yyz1-1.xx&oh=00_AfCJAxcfz92uwXUBP6GtYx4FDuIqWT6pEdgG6p8ryq5m_Q&oe=641C4E94",
     username: "Example",
-    percentRacist: 0.0,
-    percentHate: 0.0,
-    percentNeutral: 0.0
+    percentRacist: 0.5,
+    percentHate: 0.5,
+    percentNeutral: 0.5
 }
 
 function Home() {
@@ -40,11 +43,13 @@ function Home() {
         })
     }
 
+    const [ status, setStatus ] = useState('')
+
     function retrieveClasses(keywords: string) {
 
         if(keywords == null)
             keywords = ''
-
+        setStatus("Loading...")
         console.log("Sending " + keywords + " From React")
         fetch('/getClass', {
             method: 'POST',
@@ -55,6 +60,7 @@ function Home() {
         }).then(res => res.json())
         .then((data) => {
             setCurrentTwitter(data)
+            setStatus('')
         })
     }
 
@@ -66,6 +72,7 @@ function Home() {
                 <div className="tweet-profile">
                     <img className="tweet-image" src={tweet.image}/>
                     <p className="tweet-user">{'@' + tweet.username}</p>
+                    <img className="twitter-logo" src={TwitterLogo}/>
                 </div>
                 <p className="tweet-text">{tweet.text}</p>
                 <p className="tweet-date">{tweet.time}</p>
@@ -98,13 +105,13 @@ function Home() {
             <div className="comment-container">
                 <div className={"text-input " + freezeTop}>
                     <form className="text-form">
-                        <label>Key Words</label>
+                        <label>Social Speech Guard</label>
                         <input type="keyword" placeholder="Enter Something"
                         onChange = {(event) => {currentText = event.target.value}}></input>
                     </form>
 
                     <button className="submit-button" onClick={() => retrieveClasses(currentText)}>Test</button>
-
+                     <p style={{"text-align": 'center'}}>{status}</p>
                 </div>
 
                 <div className={"twitter-container " + padTwitter}>

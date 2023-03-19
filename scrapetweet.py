@@ -25,10 +25,8 @@ def scrape_by_keywords(list1, list2):
         for tweet in tweets:
             data.append({
                 'date': tweet.date,
-                'id': tweet.id,
                 'content': tweet.content,
-                'username': tweet.user.username,
-                'url': tweet.url
+                'username': tweet.user.username
             })
 
     df = pd.DataFrame(data)

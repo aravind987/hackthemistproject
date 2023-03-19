@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from scrapetweet import scrape_by_keywords, scrape_by_username
 import sys
+import random
 
 sys.stdin.reconfigure(encoding="utf-8")
 sys.stdout.reconfigure(encoding="utf-8")
@@ -34,7 +35,7 @@ def checkAccount():
     racistComments /= totalComments
     hateComments /= totalComments
     neutralComments /= totalComments
-
+    
     # Store all potentially malicious accounts from tweets
     return [{
         'image': "https://media.discordapp.net/attachments/757730257150279742/1080660938249736244/image.png?width=156&height=222",
