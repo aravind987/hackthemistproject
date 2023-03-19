@@ -11,8 +11,7 @@
 }
 
 .profile-top {
-    grid-area: 1 / 1 / 34 / 67;
-    background-color: red;
+    grid-area: 1 / 1 / 34 / 59;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -34,11 +33,93 @@
 }
 
 .profile-right {
-    grid-area: 1 / 67 / 101 / 101;
-    background-color:black;
+    grid-area: 1 / 59 / 101 / 101;
+    padding: 2em;
+    padding-top: 15vh;
+}
+
+.profile-right h1 {
+    position: relative;
+    margin: 0;
+    width: fit-content;
+    font-weight: 400;
+    font-size: 1.6em;
+    padding-bottom: 0.2em;
+
+}
+
+.recommendation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 3em;
+    margin-right: 5em;
+}
+
+.recommendation p {
+    margin-top: 1em;
+}
+
+.actions {
+    margin-right: 5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.actions button {
+    padding: 1em;
+    border-radius: 10em;
+    border-style: none;
+    width: 10vw;
+    font-size: 1em;
+    margin: 1em 0;
+    cursor: pointer;
+    font-weight: 500;
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s linear;
+}
+
+.actions button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 .profile-stats {
-    grid-area: 34 / 1 / 101 / 67;
-    background-color:blue;
+    grid-area: 34 / 1 / 101 / 59;
+    padding-left: 5em;
+    padding-top: 2em;
 }
+
+.profile-stats h1 {
+    padding-left: 2em;
+    margin: 0;
+    padding-bottom: 0.1em;
+    font-weight: 400;
+}
+
+.fill-bar {
+    width: 15vw;
+    height: 3vh;
+    background-color: white;
+    border-radius: 10em;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.5);
+}
+
+.progress-bar {
+    background-color: var(--color);
+    border-radius: 10em;
+    width: var(--percentage);
+    height: 100%;
+}
+
+.stats {
+    display: flex;
+    flex-direction: row;
+    row-gap: 2em;
+    padding: 1.5em 0;
+}
+
+.stats p {
+    margin-left: 1.5em;
+}
+
