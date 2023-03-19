@@ -16,12 +16,32 @@ Gets a username from the Front-End site and runs it through Co:here's API
 @app.route("/getAccount", methods=['GET','POST'])
 def checkAccount():
     username = request.get_json()['username']
+
+    tweetsFromUsername = scrape_by_username(username)
+
+    totalComments = len(tweetsFromUsername);
+
+    print(totalComments)
+
+    racistComments = 0
+    hateComments = 0
+    neutralComments = 0
+
+    for index, row in tweetsFromUsername.iterrows():
+        text = row['Text']
+        # ... Input into text
+
+    racistComments /= totalComments
+    hateComments /= totalComments
+    neutralComments /= totalComments
+
+    # Store all potentially malicious accounts from tweets
     return [{
         'image': "https://media.discordapp.net/attachments/757730257150279742/1080660938249736244/image.png?width=156&height=222",
         'username': username,
-        'percentRacist': 0.4,
-        'percentHate': 0.4,
-        'percentNeutral': 0.2
+        'percentRacist': racistComments,
+        'percentHate': hateComments,
+        'percentNeutral': neutralComments
     }]
 
 @app.route("/getClass", methods=['GET','POST'])
