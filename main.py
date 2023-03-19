@@ -16,6 +16,9 @@ Gets a username from the Front-End site and runs it through Co:here's API
 @app.route("/getAccount", methods=['GET','POST'])
 def checkAccount():
     username = request.get_json()['username']
+
+    tweetByUsernames = scrape_by_username(username)
+
     return [{
         'image': "https://media.discordapp.net/attachments/757730257150279742/1080660938249736244/image.png?width=156&height=222",
         'username': username,
