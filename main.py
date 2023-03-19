@@ -21,6 +21,7 @@ def checkAccount():
     username = request.get_json()['username']
 
     tweetByUsernames = scrape_by_username(username).head(90)
+    totalTweets = len(tweetByUsernames.index)
 
     #Set trigger words
     triggerWords = ['mixed', 'muslims', 'nigga', 'chinese', 'jews', 'monkey', 'white', 'lesbian', 'black', 'nigger','immigrant','cunt']
@@ -44,40 +45,62 @@ def checkAccount():
     potentialMalicious = tweetByUsernames[['Datetime','Text','Username']]
 
     potentialMalicious.to_csv('test2.csv')
+    potentialMaliciousList = []
 
-    maliciousContentList = (potentialMalicious['Text']).to_list
+    if(len(potentialMalicious) == 0):
+        return [{
+        'image': "https://media.discordapp.net/attachments/757730257150279742/1080660938249736244/image.png?width=156&height=222",
+        'username': username,
+        'percentRacist': 0,
+        'percentHate': 0,
+        'percentNeutral': 1
+    }]
+
+    for index,row in potentialMalicious.iterrows():
+        potentialMaliciousList.append(row['Text'])
 
     co = cohere.Client('c2fGtXEdjVrQGYsS8rCNTRRLjn9wHCRBunYa2S8V') # This is your trial API key
     response = co.classify(
     model='623232f3-320c-4baf-a830-2972ec7d8bb3-ft',
-    inputs=maliciousContentList)
+    inputs=potentialMaliciousList)
 
-    responsedf = pd.read_json(response)
-    responsedf.to_csv('test5.csv')
+    racistCommentScore = 0
+    hateCommentScore = 0
+    neutralCommentScore = 0
 
-    totalComments = len(tweetsFromUsername);
+    blablabla = pd.DataFrame(response.classifications)
+    blablabla.to_csv('test6.csv')
 
-    print(totalComments)
+    resultsdf = pd.DataFrame(columns=['labels','confidence'])
 
-    racistComments = 0
-    hateComments = 0
-    neutralComments = 0
+    for x in range(0,blablabla.shape[0]):
+        resultsdf.loc[x] = [response[x].prediction,response[x].confidence]
+    
+    resultsdf.to_csv('test8.csv')
 
-    for index, row in tweetsFromUsername.iterrows():
-        text = row['Text']
-        # ... Input into text
+    for idx,rows in resultsdf.iterrows():
+        if rows['labels'] == 'racism':
+            racistCommentScore += rows['confidence']
+        elif rows['labels'] == 'hate':
+            hateCommentScore += rows['confidence']
+        elif rows['labels'] == 'nothate':
+            neutralCommentScore += rows['confidence']
 
-    racistComments /= totalComments
-    hateComments /= totalComments
-    neutralComments /= totalComments
+    racistCommentScore /= totalTweets
+    hateCommentScore /= totalTweets
+    neutralCommentScore = 1 - racistCommentScore - hateCommentScore
+    scoresList = [racistCommentScore,hateCommentScore,neutralCommentScore]
+
+    df = pd.DataFrame(scoresList, columns=['scores'], index=['racist', 'hate', 'neutral'])
+    df.to_csv('test7.csv')
     
     # Store all potentially malicious accounts from tweets
     return [{
         'image': "https://media.discordapp.net/attachments/757730257150279742/1080660938249736244/image.png?width=156&height=222",
         'username': username,
-        'percentRacist': racistComments,
-        'percentHate': hateComments,
-        'percentNeutral': neutralComments
+        'percentRacist': racistCommentScore,
+        'percentHate': hateCommentScore,
+        'percentNeutral': neutralCommentScore
     }]
 
 @app.route("/getClass", methods=['GET','POST'])

@@ -21,7 +21,7 @@ def scrape_by_keywords(list1, list2):
     for i in products_list:
         keyword = i[0] + "  "+ i[1]
         tweets = sntwitter.\
-            TwitterSearchScraper(keyword +' since:2021-07-10 until:2021-07-12'+'lang:en').get_items()
+            TwitterSearchScraper(keyword +' since:2021-07-11 until:2021-07-12'+'lang:en').get_items()
         for tweet in tweets:
             data.append({
                 'date': tweet.date,

@@ -28,7 +28,7 @@ function Home() {
     function postAccount(username: string) {
         if(username == null)
             username = ''
-
+        setStatus("Loading...")
         console.log("Sending " + username + " From React For Account")
         fetch('/getAccount', {
             method: 'POST',
@@ -40,6 +40,7 @@ function Home() {
         .then((data) => {
             setProfileDisplay(data[0]);
             console.log(data[0]);
+            setStatus('')
         })
     }
 
