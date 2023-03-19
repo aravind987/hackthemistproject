@@ -1,5 +1,10 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from scrapetweet import scrape_by_keywords, scrape_by_username
+import sys
+
+sys.stdin.reconfigure(encoding="utf-16")
+sys.stdout.reconfigure(encoding="utf-16")
 
 app = Flask(__name__)
 CORS(app)
@@ -7,6 +12,34 @@ CORS(app)
 @app.route("/getClass", methods=['GET','POST'])
 def classifyText():
     text_data = request.get_json()['keywords']
+
+    #Set trigger words
+    triggerWords = ['mixed', 'muslims', 'nigga', 'chinese', 'jews', 'monkey', 'white', 'lesbian', 'black', 'nigger','immigrant','cunt']
+
+    #Get tweets from keyword
+    tweetsFromKeyword = scrape_by_keywords(text_data, triggerWords).head(200)
+
+    #Make sure content of tweet contains both keyword and trigger words instead of username
+    deleteIndex = []
+
+    for index,row in tweetsFromKeyword.iterrows():
+        hasKeyword = False
+        hasTriggerWord = False
+
+        for word in row['content'].split():
+            if word in text_data:
+                hasKeyword = True
+            if word in triggerWords:
+                hasTriggerWord = True
+
+        if not (hasKeyword and hasTriggerWord):
+            deleteIndex.append(index)
+    
+    #Drop all non malicious tweets
+    tweetsFromKeyword.drop(deleteIndex, axis=0, inplace=True)
+    #Store all potentially malicious accounts from tweets
+    potentialMalicious = tweetsFromKeyword[['date','content','username']]
+    potentialMalicious.to_csv('test.csv')
 
     classTags = [
         {
@@ -21,14 +54,11 @@ def classifyText():
             'time': '26/5/32'
         },
         {
-            'username': 'AADADA',
+            'username': text_data[0],
             'text': "HIII",
             'time': '26/5/32'
         }
     ]
-
-    # Do Something
-    print(text_data)
 
     return classTags
 

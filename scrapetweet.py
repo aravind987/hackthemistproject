@@ -21,7 +21,7 @@ def scrape_by_keywords(list1, list2):
     for i in products_list:
         keyword = i[0] + "  "+ i[1]
         tweets = sntwitter.\
-            TwitterSearchScraper(keyword +' since:2020-12-01 until:2020-12-18').get_items()
+            TwitterSearchScraper(keyword +' since:2022-02-01 until:2022-02-18').get_items()
         for tweet in tweets:
             data.append({
                 'date': tweet.date,
@@ -57,8 +57,33 @@ def scrape_by_username(un):
 
 
 if __name__ == "__main__":
-    a = ['Rashford', 'vini', 'Vinicius', "Alexander-Arnold", "Naby Keita",
-         "zlatan", "ibrahimovic"]
-    b = ['nigga', 'black']
-    df = scrape_by_keywords(a, b).head(40)
-    df.to_csv('test.csv')
+    text_data = ['rashford']
+
+    #Set trigger words
+    triggerWords = ['black']
+
+    #Get tweets from keyword
+    tweetsFromKeyword = scrape_by_keywords(text_data, triggerWords).head(50)
+    tweetInfo = tweetsFromKeyword[['content','username']].copy()
+    tweetInfo.to_csv('test.csv')
+
+    #Make sure content of tweet contains both keyword and trigger words instead of username
+    deleteIndex = []
+
+    for index,row in tweetInfo.iterrows():
+        hasKeyword = False
+        hasTriggerWord = False
+
+        for word in row['content'].split():
+            if word in text_data:
+                hasKeyword = True
+            if word in triggerWords:
+                hasTriggerWord = True
+
+        if not (hasKeyword and hasTriggerWord):
+            deleteIndex.append(index)
+    
+    tweetInfo.drop(deleteIndex, axis=0, inplace=True)
+
+    potentialMaliciousAccounts = tweetInfo['username']
+    print(potentialMaliciousAccounts)

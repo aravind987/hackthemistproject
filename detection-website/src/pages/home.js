@@ -2,7 +2,6 @@ import React from 'react'
 
 import './home.css';
 
-import { TwitterTweetEmbed } from 'react-twitter-embed'
 import { useState, useEffect } from 'react'
 
 import Profile from './profile.js'
